@@ -1,0 +1,18 @@
+websocket:
+  scheduled-cron: 0/30 * * * * ?
+  thread-pool:
+    core-pool-size: 2
+    max-pool-size: 8
+    queue-capacity: 1024
+    thread-pool-name-prefix: Websocket-Server-AsyncScheduled-ThreadPool-
+  message:
+    text-message-buffer-size: 10240000
+    binary-message-buffer-size: 512000000
+    async-send-timeout: 30000
+  session:
+    idle-timeout: 1800000
+
+audio:
+  sample-rate: 16000
+  model-path: E:/git_workspace/vosk_test/src/main/resources/vosk-model-cn-0.22/
+  temp-output-path: E:/git_workspace/live-voice-recognition/temp/

@@ -1,0 +1,39 @@
+server:
+  port: 8088
+  undertow:
+    threads:
+      worker: 200
+      io: 8
+    buffer-size: 65536
+    eager-filter-init: true
+    direct-buffers: true
+    max-http-post-size: 209715200
+    record-request-start-time: true
+    accesslog:
+      enabled: true
+      dir: ./logs
+      pattern: '%t[%I] %{i,x_forwarded_for} "%{i,Referer}" "%{i,User-Agent}" %a "%r" %s %b (%D ms)'
+
+
+spring:
+  profiles:
+    active: '@profiles.active@'
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration,org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+  favicon:
+    enabled: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      fail_on_empty_beans: false
+    time-zone: Asia/Shanghai
+  banner:
+    charset: utf-8
+    location: classpath:banner.txt
+  output:
+    ansi:
+      enabled: ALWAYS
+
+logging:
+  level:
+    root: INFO
