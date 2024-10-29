@@ -10,6 +10,9 @@ websocket:
     binary-message-buffer-size: 512000000
   session:
     idle-timeout: 1800000
+  heartbeat:
+    # 连续多久没有接收到心跳包，则判定Websocket Client已经断线,默认为30秒(单位:毫秒)
+    not-receive-ping-max-interval: 30000
 
 audio:
   sample-rate: 16000

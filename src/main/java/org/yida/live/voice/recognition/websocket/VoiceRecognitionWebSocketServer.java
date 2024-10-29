@@ -43,8 +43,12 @@ public class VoiceRecognitionWebSocketServer {
 
 	@OnMessage
 	public void onMessage(String message, Session session) {
-		if ("ping".equals(message)) {
+		if (WebSocketEventType.PING_EVENT_NAME.equals(message)) {
 			handlePingMessage(session);
+			return;
+		}
+		if (WebSocketEventType.QUIT_EVENT_NAME.equals(message)) {
+			handleQuitMessage(session);
 			return;
 		}
 		Map<String, Object> event = JacksonUtils.json2Map(message);
@@ -57,17 +61,18 @@ public class VoiceRecognitionWebSocketServer {
 		eventName = eventNameObj.toString();
 		if (WebSocketEventType.PING_EVENT_NAME.equalsIgnoreCase(eventName)) {
 			handlePingMessage(session);
-		}
-		if (WebSocketEventType.QUIT_EVENT_NAME.equalsIgnoreCase(eventName)) {
+		} else if (WebSocketEventType.QUIT_EVENT_NAME.equalsIgnoreCase(eventName)) {
 			handleQuitMessage(session);
+		} else {
+			handleOtherMessage(session, eventName);
 		}
-		handleOtherMessage(session, eventName);
 	}
 
 
 	@OnMessage
 	public void onMessage(byte[] bytesMessage, Session session) {
 		if (null != session && session.isOpen() && null != bytesMessage && bytesMessage.length > 0) {
+			WebSocketManager.updateHeartBeat(session);
 			Recognizer recognizer = AudioRecognizerHolder.getInstance().getRecognizer();
 			if (null != recognizer) {
 				ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytesMessage);
@@ -84,7 +89,6 @@ public class VoiceRecognitionWebSocketServer {
 				String responseJSONData = JacksonUtils.toJSONString(responseResult);
 				VoiceRecognitionWebSocketContext voiceRecognitionWebSocketContext = WebSocketManager.getCurrentVoiceRecognitionWebSocketContext(session);
 				if (null != voiceRecognitionWebSocketContext) {
-					WebSocketManager.updateHeartBeat(session);
 					voiceRecognitionWebSocketContext.response(WebSocketEventType.LIVE_VOICE_RECOGNITION, responseJSONData);
 				}
 			}
@@ -137,6 +141,7 @@ public class VoiceRecognitionWebSocketServer {
 		if (null == session || !session.isOpen()) {
 			return;
 		}
+		WebSocketManager.updateHeartBeat(session);
 		VoiceRecognitionWebSocketContext voiceRecognitionWebSocketContext = WebSocketManager.getCurrentVoiceRecognitionWebSocketContext(session);
 		voiceRecognitionWebSocketContext.response(WebSocketEventType.UNSUPPORT, "The websocket client with sessionId:[" +
 				session.getId() + "] doesn't support this eventName:[" + eventName + "].");

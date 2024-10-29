@@ -19,6 +19,8 @@ public class ResponseResult<T> implements Serializable {
 	private String eventName;
 	private T data;
 
+	public ResponseResult() {}
+
 	public ResponseResult(int code, String msg, String eventName, T data) {
 		this.code = code;
 		this.msg = msg;

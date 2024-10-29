@@ -153,9 +153,9 @@ public class Constants {
 	public static final String TITLE_VARAIABLE_NAME = "htmlTitle";
 
 	/**
-	 * 连续多久没有接收到心跳包，则判定Websocket Client已经断线,默认为10秒(单位:毫秒)
+	 * 连续多久没有接收到心跳包，则判定Websocket Client已经断线,默认为30秒(单位:毫秒)
 	 */
-	public static final long MAX_INTERVAL_OF_NOT_RECIEVING_HEARTBEAT_PACKET = 10000;
+	public static final long MAX_INTERVAL_OF_NOT_RECIEVING_HEARTBEAT_PACKET = 30000;
 
 	public static final String CSS_LINK_TEMPLATE = "<link href=\"${cssUrl}\" type=\"text/css\" rel=\"styleSheet\"/>";
 

@@ -15,6 +15,8 @@ public class RecognitionResult {
 	private String text;
 	private List<PerToken> result;
 
+	public RecognitionResult() {}
+
 	public RecognitionResult(int code, String text, List<PerToken> result) {
 		this.code = code;
 		this.text = text;

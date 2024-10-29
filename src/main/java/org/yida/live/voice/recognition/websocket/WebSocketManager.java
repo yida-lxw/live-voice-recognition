@@ -32,7 +32,7 @@ public class WebSocketManager {
 	 * @author yida
 	 * @date 2024-08-25 20:51:33
 	 */
-	public static void checkWebsocketClientIfAlive() {
+	public static void checkWebsocketClientIfAlive(Long maxIntervalOfNotRecievingHeartbeatPacket) {
 		if (!webSocketServerSet.isEmpty()) {
 			try {
 				lock.lock();
@@ -50,7 +50,10 @@ public class WebSocketManager {
 						if (null != webSocketSession) {
 							long lastRecieveHeartbeatTime = webSocketSession.getLastRecieveHeartbeatTime();
 							long currentTimeMills = System.currentTimeMillis();
-							if (currentTimeMills - lastRecieveHeartbeatTime > Constants.MAX_INTERVAL_OF_NOT_RECIEVING_HEARTBEAT_PACKET) {
+							if (null == maxIntervalOfNotRecievingHeartbeatPacket || maxIntervalOfNotRecievingHeartbeatPacket <= 0L) {
+								maxIntervalOfNotRecievingHeartbeatPacket = Constants.MAX_INTERVAL_OF_NOT_RECIEVING_HEARTBEAT_PACKET;
+							}
+							if (currentTimeMills - lastRecieveHeartbeatTime > maxIntervalOfNotRecievingHeartbeatPacket) {
 								boolean removeResult = webSocketServerSet.remove(webSocketServer);
 								if (removeResult) {
 									webSocketServerMap.remove(sessionId);
